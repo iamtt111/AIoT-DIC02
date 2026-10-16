@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.openai/
+site-deploy.tar
+site-deploy-fix.tar

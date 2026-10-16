@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+site-deploy.tar
+.venv/
+__pycache__/
+.pytest_cache/
+data/*.csv
+!data/.gitkeep
