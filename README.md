@@ -4,6 +4,10 @@
 
 > 本專案用於教學與課程展示。Boston Housing 帶有已知的歷史偏誤，僅適合示範迴歸流程，不應用於真實房價、信貸或人事決策
 
+## Live Demo
+https://aiot-dic02.vercel.app/
+![Regression Visualization Lab Display](/display.png)
+
 ## 功能
 
 - 在 **50 Startups** 與 **Boston Housing** 之間切換資料集
@@ -23,7 +27,7 @@
                   顯示 R² / RMSE / MAE、預測圖與特徵解釋
 ```
 
-前端每次按下「執行實驗」時，會把資料集、模型和訓練比例交給 FastAPI。後端固定使用 `random_state=42` 切分資料，使實驗結果可重現。
+前端每次按下「執行實驗」時，會把資料集、模型和訓練比例交給 FastAPI。後端固定使用 `random_state=42` 切分資料，使實驗結果可重現
 
 ## 技術架構
 
@@ -82,8 +86,8 @@ regression-visualization-lab/
 
 | 模型 | 設定與輸出 |
 | --- | --- |
-| 線性迴歸 | 數值特徵標準化；顯示標準化係數絕對值。 |
-| 決策樹迴歸 | `random_state=42`、`max_depth=5`；顯示特徵重要性。 |
+| 線性迴歸 | 數值特徵標準化；顯示標準化係數絕對值 |
+| 決策樹迴歸 | `random_state=42`、`max_depth=5`；顯示特徵重要性 |
 | 隨機森林迴歸 | 180 棵樹、`min_samples_leaf=2`、`random_state=42`；顯示特徵重要性。 |
 
 - 數值欄位使用中位數補值
@@ -146,7 +150,7 @@ npm run dev
 | 位置 | 變數 | 用途 |
 | --- | --- | --- |
 | `frontend/.env` | `VITE_API_BASE_URL` | 選用的外部 API HTTPS 網址；使用本專案的 Vercel 設定時留空，讓瀏覽器呼叫同網域的 `/api` |
-| `backend/.env` | `CORS_ORIGINS` | 僅在前端與 API 分開網域時設定；可用逗號分隔多個網域。 |
+| `backend/.env` | `CORS_ORIGINS` | 僅在前端與 API 分開網域時設定；可用逗號分隔多個網域 |
 
 ```dotenv
 # frontend/.env.production
@@ -181,25 +185,25 @@ npm run build
 
 專案已可作為一個 Vercel 專案部署。根目錄的 `vercel.toml` 定義兩個服務：
 
-- `frontend/`：Vite 建置的 React 網頁。
-- `backend/`：以 `app.main:app` 啟動的 FastAPI 服務。
+- `frontend/`：Vite 建置的 React 網頁
+- `backend/`：以 `app.main:app` 啟動的 FastAPI 服務
 
-路由會優先把 `/api/*` 交給 FastAPI，其餘網址交給 React。兩者使用相同網域，因此正式環境不必設定 `VITE_API_BASE_URL`，也不需要為同網域請求設定 CORS。`backend/data/` 沒有被忽略，部署時會一併放入 API 執行環境。
+路由會優先把 `/api/*` 交給 FastAPI，其餘網址交給 React。兩者使用相同網域，因此正式環境不必設定 `VITE_API_BASE_URL`，也不需要為同網域請求設定 CORS。`backend/data/` 沒有被忽略，部署時會一併放入 API 執行環境
 
 ### 用 Vercel Dashboard 部署
 
-1. 將目前根目錄的內容放到新的 GitHub、GitLab 或 Bitbucket 儲存庫。若你要從零開始，初始化新的版本庫即可；不需保留原本的歷史。
-2. 在 [Vercel Dashboard](https://vercel.com/new) 選擇 **Add New → Project**，匯入該儲存庫。
-3. 將 **Root Directory** 保持在儲存庫根目錄（也就是含有 `vercel.toml`、`frontend/` 與 `backend/` 的資料夾），不要選成 `frontend/` 或 `backend/`。
-4. 不必新增 `VITE_API_BASE_URL`。Vercel 會讀取 `vercel.toml`，建立網頁與 API 服務。
-5. 部署完成後先開啟 `https://你的網址/api/health`。它應回傳 JSON，接著再測試兩個資料集與三種模型。
-6. 確認預覽部署正常後，在 Vercel 將該部署提升為 Production。
+1. 將目前根目錄的內容放到新的 GitHub、GitLab 或 Bitbucket 儲存庫。若你要從零開始，初始化新的版本庫即可；不需保留原本的歷史
+2. 在 [Vercel Dashboard](https://vercel.com/new) 選擇 **Add New → Project**，匯入該儲存庫
+3. 將 **Root Directory** 保持在儲存庫根目錄（也就是含有 `vercel.toml`、`frontend/` 與 `backend/` 的資料夾），不要選成 `frontend/` 或 `backend/`
+4. 不必新增 `VITE_API_BASE_URL`。Vercel 會讀取 `vercel.toml`，建立網頁與 API 服務
+5. 部署完成後先開啟 `https://你的網址/api/health`。它應回傳 JSON，接著再測試兩個資料集與三種模型
+6. 確認預覽部署正常後，在 Vercel 將該部署提升為 Production
 
 ### 本機模擬部署
 
 平常仍可使用本機啟動方式。若已安裝並登入 Vercel CLI，可在根目錄執行 `vercel dev`，以 `vercel.toml` 同時模擬前端與 API 路由；這不是部署的必要條件。
 
-Vercel 的 Python Runtime 已支援 FastAPI；目前資料集很小，但第一次部署仍應在 Vercel 的 Build Logs 確認 `scikit-learn` 與資料檔案都成功打包。詳見 [Vercel FastAPI 文件](https://vercel.com/docs/frameworks/backend/fastapi)與 [Vercel Python Runtime 公告](https://vercel.com/changelog/python-on-vercel-is-now-generally-available)。
+Vercel 的 Python Runtime 已支援 FastAPI；目前資料集很小，但第一次部署仍應在 Vercel 的 Build Logs 確認 `scikit-learn` 與資料檔案都成功打包。詳見 [Vercel FastAPI 文件](https://vercel.com/docs/frameworks/backend/fastapi)與 [Vercel Python Runtime 公告](https://vercel.com/changelog/python-on-vercel-is-now-generally-available)
 
 ## 常見問題
 
